@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react'; 
 import coverImage from "../../assets/cover/cover-image.jpg";
 
 function About() {
@@ -16,4 +16,4 @@ function About() {
   )
 }
 
-export default About
+export default About; 

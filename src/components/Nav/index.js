@@ -1,50 +1,37 @@
-import React from "react";
-import { capitalizeFirstLetter } from "../../utils/helpers";
+// __tests__/Nav.test.js with hard coded categories
+import React from 'react';
+import { render, cleanup } from '@testing-library/react';
+import '@testing-library/jest-dom/extend-expect';
+import Nav from '..';
 
-function Nav() {
-  const  categories = [
-    { name: 'commercial', description: 'Photos of grocery stores, food trucks, and other commercial projects' },
-    { name: 'portraits', description: 'Portraits of people in my life' },
-    { name: 'food', description: 'Delicious delicacies' },
-    { name: 'landscape', description: 'Fields, farmhouses, waterfalls, and the beauty of nature' }
-  ];
+afterEach(cleanup);
 
-  const handleClick = () => {
-    console.log("click handled")
-  }
+describe('Nav component', () => {
+  it('renders', () => {
+    render(<Nav />);
+  });
 
-  return (
-    <header data-testid="header" className="flex-row px-1">
-      <h2>
-        <a href="/">
-          <span role="img" aria-label="camera"> 📸</span> Oh Snap!
-        </a>
-      </h2>
-      <nav>
-        <ul className="flex-row">
-          <li className="mx-2">
-            <a href="#about" onClick={() => handleClick()}>
-              About me
-            </a>
-          </li>
-          <li className={"mx-2"}>
-            <span onClick={() => handleClick()}>
-              Contact
-            </span>
-          </li>
-          {
-            categories.map((category) => (
-              <li className="mx-1" key={category.name} >
-                <span onClick={() => { handleClick(); }}>
-                 {capitalizeFirstLetter(category.name)}
-                </span>
-              </li>
-            ))
-          }
-        </ul>
-      </nav>
-    </header>
-  );
-}
+  it('matches snapshot', () => {
+    const { asFragment } = render(<Nav />);
 
-export default Nav;
+    expect(asFragment()).toMatchSnapshot();
+  });
+})
+
+describe('emoji is visible', () => {
+  it('inserts emoji into the h2', () => {
+    const { getByLabelText } = render(<Nav />);
+
+    expect(getByLabelText('camera')).toHaveTextContent('📸');
+  });
+})
+
+describe('links are visible', () => {
+  it('inserts text into the links', () => {
+    const { getByTestId } = render(<Nav />);
+
+    expect(getByTestId('link')).toHaveTextContent('Oh Snap!');
+    expect(getByTestId('about')).toHaveTextContent('About me');
+  });
+
+})
